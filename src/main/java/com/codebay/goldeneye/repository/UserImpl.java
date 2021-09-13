@@ -2,13 +2,13 @@ package com.codebay.goldeneye.repository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import com.codebay.goldeneye.WebApplication;
 
 @Repository
 public class UserImpl implements IUser{
+	
 	private static Logger LOG = LoggerFactory.getLogger(WebApplication.class);
 	
 	private String name;
