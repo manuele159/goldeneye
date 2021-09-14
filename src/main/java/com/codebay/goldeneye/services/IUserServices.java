@@ -1,7 +1,9 @@
 package com.codebay.goldeneye.services;
 
+import com.codebay.goldeneye.repository.IUser;
+
 public interface IUserServices {
-	void register(String name, 
+	IUser register(String name, 
 			String surname, 
     		String department, 
     		String location);
