@@ -12,8 +12,9 @@ public class UserServicesImpl implements IUserServices {
 	private IUser user;
 	
 	@Override
-	public void register(String name, String surname, String department, String location) {
+	public IUser register(String name, String surname, String department, String location) {
 		user.register(name, surname, department, location);
+		return user;
 	}
 
 }

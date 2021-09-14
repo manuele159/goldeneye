@@ -1,48 +1,41 @@
 package com.codebay.goldeneye.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.codebay.goldeneye.constants.TemplatesConstants;
+import com.codebay.goldeneye.repository.UserImpl;
+import com.codebay.goldeneye.rest.ToolRestApi;
 import com.codebay.goldeneye.services.UserServicesImpl;
 
 @Controller
 public class UserController {
-	
-    private final String SYMBOL = "@";
-    private final String GOLDEN = "goldeneye.com";
+    
+    @Autowired
+    private UserServicesImpl userServices;
     
     @GetMapping("/register")
     public String getEmail(
-    		@RequestParam String name, /*Request all the param, the data is also required on the front end*/
+    		@RequestParam String name,
     		@RequestParam String surname, 
     		@RequestParam String department, 
     		@RequestParam String location,
-    		Model IModel) {
+    		Model IModel)  {
     	
-    	UserServicesImpl userServices = new UserServicesImpl();
-    	userServices.register(name, surname, department, location);
+    	String apiName = ToolRestApi.checkWord(name);
+    	String apiSurname = ToolRestApi.checkWord(surname);
     	
-	    String email = "";
-	    //Getting the first letter of the name
-	    String firstLetter = String.valueOf(name.charAt(0));
-	    
-	    //Concat all the string for the email
-	    //And transform all the data to lower case
-	    email = 
-	    firstLetter.toLowerCase() +
-	    /*In case some put both last names, only get the first one*/
-	    surname.split(" ")[0].toLowerCase() + 
-	    "." + 
-	    department.toLowerCase() + 
-	    SYMBOL + 
-	    location.toLowerCase() + 
-	    "." + 
-	    GOLDEN;
-	    
-	    IModel.addAttribute("email", email.replace(" ", ""));
+    	name = !apiName.isEmpty() ? apiName : name;
+    	surname = !apiSurname.isEmpty() ? apiSurname : surname;
+    	    	
+		UserImpl user = (UserImpl) userServices.register(name, surname, department, location);
     	
+	    IModel.addAttribute(TemplatesConstants.EMAIL, user.getEmail());    	
     	return "register";
     }
+
+
 }
